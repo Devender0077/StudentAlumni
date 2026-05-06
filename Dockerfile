@@ -8,11 +8,11 @@ RUN npm install --legacy-peer-deps || yarn install --frozen-lockfile
 
 COPY frontend/ ./
 
-RUN npx expo export:web
+RUN npx expo export --platform web --output-dir dist
 
 FROM nginx:alpine
 
-COPY --from=builder /app/web-build /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
