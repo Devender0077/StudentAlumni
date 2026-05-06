@@ -2,9 +2,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY frontend/package.json frontend/package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json* frontend/yarn.lock* ./
 
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps || yarn install --frozen-lockfile
 
 COPY frontend/ ./
 
