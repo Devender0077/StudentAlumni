@@ -6,12 +6,6 @@
  *   2. Password field is shown; password_strength tracked client-side
  *      (and server-side via track event without storing the password).
  *   3. Submit hits existing /api/auth/login (unchanged) → 2FA handled like before.
- *
- * Existing test credentials (preserved):
- *   student01@test.com / TestPass@123
- *   mentor01@test.com  / TestPass@123
- *   college01@test.com / TestPass@123
- *   admin@careerpath.app / Admin@12345
  */
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Alert, Platform } from 'react-native';
@@ -221,36 +215,6 @@ export default function LoginScreen() {
 
       <PrimaryButton label="Sign in" onPress={onLogin} loading={loading} />
 
-      {/* Quick-Login Persona Chips — for fast E2E testing */}
-      <View style={s.quickLoginBox}>
-        <Text style={s.quickLoginLabel}>QUICK LOGIN AS PERSONA</Text>
-        <View style={s.quickLoginRow}>
-          {[
-            { e: 'booked1@persona.demo',          l: '🎓 Student',  c: '#A78BFA' },
-            { e: 'mentor-active1@persona.demo',   l: '👨‍🏫 Mentor',   c: '#5EEAD4' },
-            { e: 'college-high1@persona.demo',    l: '🏫 College',  c: '#FCD34D' },
-            { e: 'admin-super1@persona.demo',     l: '🛡 Admin',    c: '#F472B6' },
-          ].map((p) => (
-            <Pressable
-              key={p.e}
-              onPress={() => {
-                setEmail(p.e);
-                setPassword('TestPass@123');
-                onLogin(p.e, 'TestPass@123');
-              }}
-              style={({ hovered }: any) => [
-                s.quickChip,
-                { borderColor: p.c + '60' },
-                hovered && { backgroundColor: p.c + '15' },
-              ]}
-            >
-              <Text style={[s.quickChipText, { color: p.c }]}>{p.l}</Text>
-            </Pressable>
-          ))}
-        </View>
-        <Text style={s.quickLoginHint}>Password auto-filled · TestPass@123</Text>
-      </View>
-
       <Text style={s.signup}>
         New to Student Alumni?{' '}
         <Text style={s.signupLink} onPress={() => router.push('/get-started')}>Get started</Text>
@@ -280,18 +244,4 @@ const s = StyleSheet.create({
 
   signup: { textAlign: 'center', color: AC.muted, fontFamily: FONTS.med, fontSize: 13, marginTop: 18 },
   signupLink: { color: AC.primaryL, fontFamily: FONTS.bold, ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}) },
-
-  quickLoginBox: {
-    marginTop: 18, paddingTop: 14,
-    borderTopWidth: 1, borderTopColor: AC.border,
-  },
-  quickLoginLabel: { color: AC.dim, fontFamily: FONTS.xbold, fontSize: 10, letterSpacing: 1.2, textAlign: 'center', marginBottom: 8 },
-  quickLoginRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, justifyContent: 'center' },
-  quickChip: {
-    paddingHorizontal: 11, paddingVertical: 6, borderRadius: 8,
-    borderWidth: 1, backgroundColor: 'transparent',
-    ...(Platform.OS === 'web' ? ({ cursor: 'pointer', transitionDuration: '150ms' } as any) : {}),
-  },
-  quickChipText: { fontFamily: FONTS.bold, fontSize: 11.5 },
-  quickLoginHint: { color: AC.dim, fontFamily: FONTS.med, fontSize: 10.5, textAlign: 'center', marginTop: 8, fontStyle: 'italic' },
 });
